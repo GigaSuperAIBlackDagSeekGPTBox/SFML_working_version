@@ -1,0 +1,30 @@
+cmake_minimum_required(VERSION 3.10)
+project(Test)
+
+# Стандарт C++
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+# Пути к локальной SFML
+set(SFML_DIR "D:/sfmlg++/SFML-3.0.0")
+include_directories("${SFML_DIR}/include")
+link_directories("${SFML_DIR}/lib")
+
+# Создаем исполняемый файл
+add_executable(Test main.cpp)
+
+# Линковка с библиотеками SFML (используем .a версии для MinGW)
+target_link_libraries(Test
+    sfml-graphics
+    sfml-window
+    sfml-system
+)
+
+# Копирование DLL после сборки (чтобы exe работал)
+add_custom_command(TARGET Test POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "${SFML_DIR}/bin/sfml-graphics-3.dll"
+    "${SFML_DIR}/bin/sfml-window-3.dll"
+    "${SFML_DIR}/bin/sfml-system-3.dll"
+    $<TARGET_FILE_DIR:Test>
+)
