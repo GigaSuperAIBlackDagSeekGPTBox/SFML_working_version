@@ -11,7 +11,7 @@ include_directories("${SFML_DIR}/include")
 link_directories("${SFML_DIR}/lib")
 
 # Создаем исполняемый файл
-add_executable(Test main.cpp)
+add_executable(Test src/main.cpp)
 
 # Линковка с библиотеками SFML (используем .a версии для MinGW)
 target_link_libraries(Test
