@@ -21,7 +21,7 @@ public:
     sf::Vector2f _spritePosition;
     sf::Image _animationImage;
     sf::Texture animationTexture;
-    std::vector<sf::Texture> _animationTextures;
+    sf::Texture _animationTextures;
     std::vector<sf::Sprite> _animationSprites;
 
 public:
@@ -37,15 +37,15 @@ public:
         _imageSize = {_animationImage.getSize().x, _animationImage.getSize().y};
         _spritePosition = {_imageSize.x / 2, _imageSize.y / 2};
         _imageCount = static_cast<int>(_imageSize.x/32);
+                    animationTexture.loadFromFile(filename, false);
 
         for (int i = 0; i < _imageCount; ++i){
             sf::Vector2i framePosition(i * 32, 0);
             sf::Vector2i frameSize(32, 32);
 
             sf::IntRect frameRect(framePosition, frameSize);
-            animationTexture.loadFromFile(filename, false, sf::IntRect({i * 32, 0}, {32, 32}));
-            _animationTextures.push_back(animationTexture);
-            sf::Sprite animationSprite(animationTexture);
+
+            sf::Sprite animationSprite(animationTexture, sf::IntRect({i * 32, 0}, {32, 32}));
             animationSprite.setPosition(_spritePosition);
             _animationSprites.push_back(animationSprite);
         }
@@ -57,7 +57,7 @@ class Animator{
 private:
     sf::Clock clock; 
     std::vector<std::vector<sf::Sprite>> entitiesAnimationFrames;
-    float _frameTime  = 0.5;
+    float _frameTime  = 0.125;
 public:
     Animator(){
 
