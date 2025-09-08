@@ -4,6 +4,7 @@
 #include <SFML/System.hpp>
 #include <string>
 #include <iostream>
+#include <variant>
 
 class Animation;
 
@@ -56,7 +57,7 @@ class Animator{
 private:
     sf::Clock clock; 
     std::vector<std::vector<sf::Sprite>> entitiesAnimationFrames;
-    float _frameTime  = 0.125;
+    float _frameTime  = 0.5;
 public:
     Animator(){
 
