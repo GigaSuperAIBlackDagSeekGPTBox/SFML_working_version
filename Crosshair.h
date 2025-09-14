@@ -19,6 +19,7 @@ public:
 
         sf::Sprite animationSprite(_animationTexture);
         _animationSprite = animationSprite;
+        _animationSprite.scale({2.0f, 2.0f});
     }
 
     void Draw(sf::RenderWindow &window){
