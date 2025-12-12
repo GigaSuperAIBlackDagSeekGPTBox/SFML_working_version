@@ -11,7 +11,7 @@ public:
     // 0 = воздух, 1 = пол, 2 = стена
     std::vector<std::vector<int>> generate();
 
-    sf::Sprite getTileSprite(int id);
+    const sf::Sprite& getTileSprite(int id) const;
 
 private:
     int _width;
@@ -21,7 +21,6 @@ private:
     sf::Vector2u _imageSize;
     sf::Image _tileImage;
     sf::Texture _tileTexture;
-    sf::Sprite _sprite;
     std::vector<sf::Texture> _tileMapTextures;
     std::vector<sf::Sprite> _tileMap;
 };

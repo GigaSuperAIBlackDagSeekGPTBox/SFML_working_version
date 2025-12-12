@@ -6,6 +6,7 @@
 #include <iostream>
 #include <variant>
 #include <cmath>
+#include <stdexcept>
 
 class Bone{
 private:
@@ -16,15 +17,20 @@ private:
     Bone* _parent = nullptr;
 
 public:
-    Bone(Bone* parent, const std::string& filename) : _boneSprite(_boneTexture) {
-        if (!_boneTexture.loadFromFile(filename)) {
+    Bone(Bone* parent, const std::string& filename, 
+        sf::Vector2f initialPosition = {0.0f, 0.0f}) 
+        : _boneSprite(_boneTexture), _parent(parent), _localPosition(initialPosition) {
+        
+        sf::Texture boneTexture;
+        if (!boneTexture.loadFromFile(filename)) {
             throw std::runtime_error("Не удалось загрузить " + filename);
         }
-        _boneSprite.setTexture(_boneTexture);
-        _boneSprite.scale({2, 2});
-        _boneSprite.setPosition({500, 500});
-
-        _parent = parent;
+        _boneTexture = boneTexture;
+        
+        sf::Sprite boneSprite(_boneTexture);
+        _boneSprite = boneSprite;
+        _boneSprite.scale({2.0f, 2.0f});
+        _boneSprite.setPosition(initialPosition);
     }
 
     sf::Vector2f getGlobalPosition() const {
@@ -40,10 +46,13 @@ public:
     }
 
     float getGlobalRotation() const {
-        return _rotation + (_parent ? _parent->getGlobalRotation() : 0.f);
+        return _rotation + (_parent ? _parent->getGlobalRotation() : 0.0f);
     }
 
-    
+    // Геттеры для локальных значений (нужны для анимации)
+    sf::Vector2f getLocalPosition() const { return _localPosition; }
+    float getLocalRotation() const { return _rotation; }
+    Bone* getParent() const { return _parent; }
 
     void setParent(Bone* parent) { _parent = parent; }
     void setLocalPositionVector(const sf::Vector2f& local) { _localPosition = local; }
@@ -52,7 +61,7 @@ public:
 
     void updateSprite(){
         _boneSprite.setPosition(getGlobalPosition());
-        _boneSprite.setRotation(sf::degrees(getGlobalRotation()));
+        _boneSprite.setRotation(sf::degrees(getGlobalRotation())); // конвертируем градусы в sf::Angle
     }
 
         void draw(sf::RenderTarget& target) {
